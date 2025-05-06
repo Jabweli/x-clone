@@ -12,6 +12,24 @@
   --font-mono: var(--font-geist-mono);
 }
 
+@theme {
+  --breakpoint-xxsm: 23.4375rem;
+  --breakpoint-xsm: 31.25rem;
+  --breakpoint-sm: 37.5rem;
+  --breakpoint-md: 43.125rem;
+  --breakpoint-lg: 63.75rem;
+  --breakpoint-xl: 67.375rem;
+  --breakpoint-xxl: 79.0625rem;
+  --color-textGray: #71767b;
+  --color-textLight: #e7e9ea;
+  --color-borderGray: #2f3336;
+  --color-inputGray: #202327;
+  --color-iconBlue: #1d9bf0;
+  --color-iconGreen: #00ba7c;
+  --color-iconPink: #f91880;
+  --color-bgBlack: #0a0a0a;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
@@ -20,7 +38,42 @@
 }
 
 body {
-  background: var(--background);
+  background: rgb(0,0,0);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.post-text {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+}
+
+
+/* For Webkit-based browsers (Chrome, Edge, Safari) */
+::-webkit-scrollbar {
+  width: 14px;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a1a; /* dark background to match modal */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #71767b;
+  border-radius: 9999px;
+  border: 2px solid #1a1a1a; /* gives spacing inside the track */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #969ba0; /* lighter on hover */
+}
+
+/* For Firefox */
+* {
+  scrollbar-width: 14px;
+  /* scrollbar-color: #71767b #1a1a1a; */
+  scrollbar-color: rgb(62, 65, 68) rgb(22, 24, 28);
+}
+

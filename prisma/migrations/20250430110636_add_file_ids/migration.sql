@@ -1,0 +1,7 @@
+-- AlterTable
+ALTER TABLE `post` ADD COLUMN `imgFileId` VARCHAR(191) NULL,
+    ADD COLUMN `videoFileId` VARCHAR(191) NULL;
+
+-- AlterTable
+ALTER TABLE `user` ADD COLUMN `coverFileId` VARCHAR(191) NULL,
+    ADD COLUMN `imgFileId` VARCHAR(191) NULL;

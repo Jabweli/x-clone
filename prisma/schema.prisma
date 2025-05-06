@@ -1,0 +1,130 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id    String     @id
+  email String  @unique
+  username String  @unique
+  displayName  String?
+  bio  String?
+  location  String?
+  website  String?
+  job String?
+  dob  DateTime?
+  img  String?
+  imgFileId String?
+  cover  String?
+  coverFileId String?
+  createdAt DateTime @default(now())
+
+
+  // relations
+  posts Post[]
+  likes Like[] // a user has many likes ---> one to many
+  saves SavedPosts[]
+
+  followers Follow[] @relation("UserFollowers")
+  followings Follow[] @relation("UserFollowings")
+}
+
+
+model Hashtag {
+  id       Int           @id @default(autoincrement())
+  tag      String        @unique @db.VarChar(50)
+  posts    PostHashtag[]
+  createdAt DateTime     @default(now())
+}
+
+model PostHashtag {
+  postId    Int
+  hashtagId Int
+
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  hashtag   Hashtag  @relation(fields: [hashtagId], references: [id], onDelete: Cascade)
+
+  @@id([postId, hashtagId])
+}
+
+model Post {
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  desc String? @db.VarChar(255)
+  img String?
+  imgFileId String?
+  video String?
+  videoFileId String?
+  fileType String?
+  isSensitive Boolean @default(false)
+  imgWidth Int?
+  imgHeight Int?
+  videoWidth Int?
+  videoHeight Int?
+
+
+  // relations
+  user User @relation(fields: [userId], references: [id])
+  userId String
+
+  rePostId Int?
+  rePost Post? @relation("RePosts", fields: [rePostId], references: [id], onDelete: Cascade)
+  rePosts Post[] @relation("RePosts")
+
+  parentPostId Int?
+  parentPost Post? @relation("PostComments", fields: [parentPostId], references: [id], onDelete: Cascade)
+  comments Post[] @relation("PostComments")
+
+  likes Like[] // a post has many likes ---> one to many
+  saves SavedPosts[]
+  hashtags PostHashtag[]
+}
+
+
+model Like {
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+
+  // relations
+  userId String
+  postId Int
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+}
+
+model SavedPosts {
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+
+  // relations
+  userId String
+  postId Int
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+}
+
+model Follow {
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+
+  // relations
+  followerId String
+  followingId String
+
+  follower User @relation("UserFollowers", fields: [followerId], references: [id], onDelete: Cascade)
+  following User @relation("UserFollowings", fields: [followingId], references: [id], onDelete: Cascade)
+}
