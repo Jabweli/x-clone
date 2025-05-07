@@ -53,6 +53,7 @@ const PostMoreInfo = ({
     }
 
     if (state.success) {
+      setIsModalOpen(false);
       toast("Post deleted successfully!", {
         progress: undefined,
         className: "!bg-iconBlue !text-white !text-sm",
@@ -60,6 +61,7 @@ const PostMoreInfo = ({
     }
 
     if (state.error) {
+      setIsModalOpen(false);
       toast.error(state.error, {
         progress: undefined,
         className: "!bg-red-500 !text-white !text-sm",
