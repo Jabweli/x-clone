@@ -7,7 +7,7 @@ import LoadingSpinner from "./LoadingSpinner";
 
 const fetchPosts = async (pageParam: number, userProfileId?: string) => {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_ENDPOINT_URL}/posts?cursor=${pageParam}&user=${userProfileId}`
+    `${process.env.NEXT_PUBLIC_ENDPOINT_URL}/api/posts?cursor=${pageParam}&user=${userProfileId}`
   );
   if (!res.ok) {
     throw new Error("Failed to fetch posts");

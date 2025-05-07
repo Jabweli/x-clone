@@ -10,8 +10,9 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model User {
@@ -39,6 +40,23 @@ model User {
   followings Follow[] @relation("UserFollowings")
 }
 
+model Hashtag {
+  id        Int           @id @default(autoincrement())
+  tag       String        @unique @db.VarChar(50)
+  posts     PostHashtag[]
+  createdAt DateTime      @default(now())
+}
+
+model PostHashtag {
+  postId    Int
+  hashtagId Int
+
+  post    Post    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  hashtag Hashtag @relation(fields: [hashtagId], references: [id], onDelete: Cascade)
+
+  @@id([postId, hashtagId])
+}
+
 model Post {
   id          Int      @id @default(autoincrement())
   createdAt   DateTime @default(now())
@@ -60,15 +78,16 @@ model Post {
   userId String
 
   rePostId Int?
-  rePost   Post?  @relation("RePosts", fields: [rePostId], references: [id])
+  rePost   Post?  @relation("RePosts", fields: [rePostId], references: [id], onDelete: Cascade)
   rePosts  Post[] @relation("RePosts")
 
   parentPostId Int?
-  parentPost   Post?  @relation("PostComments", fields: [parentPostId], references: [id])
+  parentPost   Post?  @relation("PostComments", fields: [parentPostId], references: [id], onDelete: Cascade)
   comments     Post[] @relation("PostComments")
 
-  likes Like[] // a post has many likes ---> one to many
-  saves SavedPosts[]
+  likes    Like[] // a post has many likes ---> one to many
+  saves    SavedPosts[]
+  hashtags PostHashtag[]
 }
 
 model Like {
@@ -79,8 +98,8 @@ model Like {
   userId String
   postId Int
 
-  user User @relation(fields: [userId], references: [id])
-  post Post @relation(fields: [postId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
 }
 
 model SavedPosts {
@@ -91,8 +110,8 @@ model SavedPosts {
   userId String
   postId Int
 
-  user User @relation(fields: [userId], references: [id])
-  post Post @relation(fields: [postId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
 }
 
 model Follow {
@@ -103,6 +122,6 @@ model Follow {
   followerId  String
   followingId String
 
-  follower  User @relation("UserFollowers", fields: [followerId], references: [id])
-  following User @relation("UserFollowings", fields: [followingId], references: [id])
+  follower  User @relation("UserFollowers", fields: [followerId], references: [id], onDelete: Cascade)
+  following User @relation("UserFollowings", fields: [followingId], references: [id], onDelete: Cascade)
 }
