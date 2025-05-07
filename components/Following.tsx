@@ -5,6 +5,7 @@ import React from 'react'
 import LoadingSpinner from './LoadingSpinner';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Post from './Post';
+import Recommendations from './Recommendations';
 
 
 const fetchPosts = async (pageParam: number,) => {
@@ -30,6 +31,8 @@ const Following = () => {
   if (status === "pending") return <LoadingSpinner />;
 
   const followingPosts = data?.pages?.flatMap((page) => page.posts) || [];
+
+  if(followingPosts.length === 0) return <Recommendations type='main'/>
 
   return (
     <InfiniteScroll

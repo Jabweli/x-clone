@@ -25,7 +25,7 @@ export default function Home() {
     <>
       <HomePageTabs activeTab={activeTab} setActiveTab={setActiveTab}/>
       {
-        !isLoading && data.user?.img && <WritePost userImg={data.user?.img as string}/>
+        !isLoading && <WritePost userImg={data.user?.img as string}/>
       }
       {
         activeTab === "for" ? <Feed /> : <Following />
