@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
 const getUser = async () => {
-  const res = await fetch("http://localhost:3000/api/user")
+  const res = await fetch(`${process.env.NEXT_PUBLIC_ENDPOINT_URL}/api/user`)
   return res.json();
 }
 
