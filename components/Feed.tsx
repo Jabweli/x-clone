@@ -35,7 +35,7 @@ const Feed = ({ userProfileId }: { userProfileId?: string;}) => {
           {posts.map((post:any, index:number) => (
             <React.Fragment key={post.id}>
               <Post post={post} />
-              {index === 4 || index === 19 && <Recommendations type="main" />}{" "}
+              {index === 4 && <Recommendations type="main" />}{" "}
             </React.Fragment>
           ))}
           <InfiniteFeed userProfileId={userProfileId} />
